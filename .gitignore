@@ -1,0 +1,4 @@
+#Compiled Python files
+
+*.рус
+__pycache__/
