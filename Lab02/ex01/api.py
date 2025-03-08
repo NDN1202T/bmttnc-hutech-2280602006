@@ -5,11 +5,17 @@ from cipher.vigenere.vigenere_cipher import VigenereCipher
 from cipher.caesar import CaesarCipher
 from cipher.transposition import TranspositionCipher
 
-
+# Tạo một instance Flask duy nhất
 app = Flask(__name__)
 
+# Khởi tạo các đối tượng cipher
 playfair_cipher = PlayFairCipher()
+railfence_cipher = RailFenceCipher()
+vigenere_cipher = VigenereCipher()
+caesar_cipher = CaesarCipher()
+transposition_cipher = TranspositionCipher()
 
+# Playfair Cipher Routes
 @app.route('/api/playfair/creatematrix', methods=['POST'])
 def playfair_creatematrix():
     data = request.json
@@ -41,15 +47,9 @@ def playfair_decrypt():
     decrypted_text = playfair_cipher.playfair_decrypt(cipher_text, playfair_matrix)
     return jsonify({'decrypted_text': decrypted_text})
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
-app = Flask(__name__)
-
-railfence_cipher = RailFenceCipher()
-
+# Rail Fence Cipher Routes
 @app.route('/api/railfence/encrypt', methods=['POST'])
-def encrypt():
+def railfence_encrypt():
     try:
         data = request.json
         plain_text = data['plain_text']
@@ -64,7 +64,7 @@ def encrypt():
         return jsonify({'error': 'An unexpected error occurred'}), 500
 
 @app.route('/api/railfence/decrypt', methods=['POST'])
-def decrypt():
+def railfence_decrypt():
     try:
         data = request.json
         cipher_text = data['cipher_text']
@@ -77,17 +77,13 @@ def decrypt():
         return jsonify({'error': 'Missing cipher_text or key'}), 400
     except Exception as e:
         return jsonify({'error': 'An unexpected error occurred'}), 500
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
 
-
-app = Flask(__name__)
-
-vigenere_cipher = VigenereCipher()
-
+# Vigenère Cipher Routes
 @app.route('/api/vigenere/encrypt', methods=['POST'])
 def vigenere_encrypt():
     data = request.json
+    if not data or 'plain_text' not in data or 'key' not in data:
+        return jsonify({'error': 'Missing plain_text or key'}), 400
     plain_text = data['plain_text']
     key = data['key']
     encrypted_text = vigenere_cipher.vigenere_encrypt(plain_text, key)
@@ -96,22 +92,19 @@ def vigenere_encrypt():
 @app.route('/api/vigenere/decrypt', methods=['POST'])
 def vigenere_decrypt():
     data = request.json
+    if not data or 'cipher_text' not in data or 'key' not in data:
+        return jsonify({'error': 'Missing cipher_text or key'}), 400
     cipher_text = data['cipher_text']
     key = data['key']
     decrypted_text = vigenere_cipher.vigenere_decrypt(cipher_text, key)
     return jsonify({'decrypted_text': decrypted_text})
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
-
-app = Flask(__name__)
-
-caesar_cipher = CaesarCipher()
-
+# Caesar Cipher Routes
 @app.route("/api/caesar/encrypt", methods=["POST"])
 def caesar_encrypt():
     data = request.json
+    if not data or 'plain_text' not in data or 'key' not in data:
+        return jsonify({'error': 'Missing plain_text or key'}), 400
     plain_text = data['plain_text']
     key = int(data['key'])
     encrypted_text = caesar_cipher.encrypt_text(plain_text, key)
@@ -120,25 +113,19 @@ def caesar_encrypt():
 @app.route("/api/caesar/decrypt", methods=["POST"])
 def caesar_decrypt():
     data = request.json
+    if not data or 'cipher_text' not in data or 'key' not in data:
+        return jsonify({'error': 'Missing cipher_text or key'}), 400
     cipher_text = data['cipher_text']
     key = int(data['key'])
     decrypted_text = caesar_cipher.decrypt_text(cipher_text, key)
     return jsonify({'decrypted_message': decrypted_text})
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
-
-
-
-
-
-app = Flask(__name__)
-
-transposition_cipher = TranspositionCipher()
-
+# Transposition Cipher Routes
 @app.route('/api/transposition/encrypt', methods=['POST'])
 def transposition_encrypt():
     data = request.get_json()
+    if not data or 'plain_text' not in data or 'key' not in data:
+        return jsonify({'error': 'Missing plain_text or key'}), 400
     plain_text = data.get('plain_text')
     key = int(data.get('key'))
     encrypted_text = transposition_cipher.encrypt(plain_text, key)
@@ -147,10 +134,13 @@ def transposition_encrypt():
 @app.route('/api/transposition/decrypt', methods=['POST'])
 def transposition_decrypt():
     data = request.get_json()
+    if not data or 'cipher_text' not in data or 'key' not in data:
+        return jsonify({'error': 'Missing cipher_text or key'}), 400
     cipher_text = data.get('cipher_text')
     key = int(data.get('key'))
     decrypted_text = transposition_cipher.decrypt(cipher_text, key)
     return jsonify({'decrypted_text': decrypted_text})
 
+# Chạy server một lần duy nhất
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

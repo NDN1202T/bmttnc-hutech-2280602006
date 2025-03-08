@@ -12,14 +12,18 @@ class TranspositionCipher:
         return encrypted_text
 
     def decrypt(self, text, key):
-        num_rows = (len(text) + key - 1) // key
-        decrypted_text = [''] * len(text)
-        col = 0
-        row = 0
-        for symbol in text:
-            decrypted_text[row] += symbol
-            row += 1
-            if row == num_rows or (row == num_rows - 1 and col >= key - 1):
-                row = 0
-                col += 1
-        return ''.join(decrypted_text[:len(text)])
+        # Tính số hàng và cột
+        num_cols = key
+        num_rows = (len(text) + num_cols - 1) // num_cols  # Số hàng
+        decrypted_text = [''] * len(text)  # Mảng để lưu kết quả
+        
+        # Tính số ký tự trong từng cột
+        pos = 0
+        for col in range(num_cols):
+            pointer = col
+            while pointer < len(text):
+                decrypted_text[pointer] = text[pos]
+                pos += 1
+                pointer += num_cols
+        
+        return ''.join(decrypted_text)
