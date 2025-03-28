@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from rsa_logic import RSACipher  # Import từ rsa_logic.py
-from cipher.ecc import ECCCipher
+from rsa_cipher.rsa_logic import RSACipher  # Sửa đường dẫn
+from ecc.ecc_cipher import ECCCipher
 
 app = Flask(__name__)
 

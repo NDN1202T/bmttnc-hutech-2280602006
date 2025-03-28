@@ -1,12 +1,12 @@
 import rsa
-from rsa import PrivateKey, PublicKey  # Import trực tiếp từ rsa
+from rsa import PrivateKey, PublicKey  # Import trực tiếp từ thư viện rsa
 import os
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa as crypto_rsa
 from cryptography.hazmat.backends import default_backend
 
-if not os.path.exists('cipher/rsa/keys'):
-    os.makedirs('cipher/rsa/keys')
+if not os.path.exists(r'C:\Users\Administrator\bmttnc-hutech-2280602006\Lab03\Cipher\rsa_cipher\keys'):
+    os.makedirs(r'C:\Users\Administrator\bmttnc-hutech-2280602006\Lab03\Cipher\rsa_cipher\keys')
 
 class RSACipher:
     def __init__(self):
@@ -19,12 +19,12 @@ class RSACipher:
             backend=default_backend()
         )
         public_key = private_key.public_key()
-        with open('cipher/rsa/keys/publicKey.pem', 'wb') as p:
+        with open(r'C:\Users\Administrator\bmttnc-hutech-2280602006\Lab03\Cipher\rsa_cipher\keys\publicKey.pem', 'wb') as p:
             p.write(public_key.public_bytes(
                 encoding=serialization.Encoding.PEM,
                 format=serialization.PublicFormat.SubjectPublicKeyInfo
             ))
-        with open('cipher/rsa/keys/privateKey.pem', 'wb') as p:
+        with open(r'C:\Users\Administrator\bmttnc-hutech-2280602006\Lab03\Cipher\rsa_cipher\keys\privateKey.pem', 'wb') as p:
             p.write(private_key.private_bytes(
                 encoding=serialization.Encoding.PEM,
                 format=serialization.PrivateFormat.PKCS8,
@@ -32,13 +32,13 @@ class RSACipher:
             ))
 
     def load_keys(self):
-        with open('cipher/rsa/keys/privateKey.pem', 'rb') as p:
+        with open(r'C:\Users\Administrator\bmttnc-hutech-2280602006\Lab03\Cipher\rsa_cipher\keys\privateKey.pem', 'rb') as p:
             private_key = serialization.load_pem_private_key(
                 p.read(),
                 password=None,
                 backend=default_backend()
             )
-        with open('cipher/rsa/keys/publicKey.pem', 'rb') as p:
+        with open(r'C:\Users\Administrator\bmttnc-hutech-2280602006\Lab03\Cipher\rsa_cipher\keys\publicKey.pem', 'rb') as p:
             public_key = serialization.load_pem_public_key(
                 p.read(),
                 backend=default_backend()
