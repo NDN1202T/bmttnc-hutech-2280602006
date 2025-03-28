@@ -15,7 +15,7 @@ def generate_server_key_pair(parameters):
 
 def main():
     # Tạo thư mục nếu chưa tồn tại
-    save_path = "week04/dh_key_pair"
+    save_path = r"C:\Users\Administrator\bmttnc-hutech-2280602006\Lab04\dh_key_pair"
     os.makedirs(save_path, exist_ok=True)
 
     # Tạo tham số DH
